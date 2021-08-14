@@ -8,7 +8,7 @@ from timeit import default_timer as timer
 import cv2
 import numpy as np
 import pyautogui
-from commons.game_objects import get_game_objects, get_game_screen
+from commons.game_objects import get_cacti_positions, get_game_screen
 
 start = timer()
 old_shortest_distance = 0
@@ -17,7 +17,7 @@ while 1:
     # read image
     img = get_game_screen()
 
-    rex, super_cacti = get_game_objects(img)
+    rex, super_cacti = get_cacti_positions(img)
 
     # # show thresh and result
     distances = []
