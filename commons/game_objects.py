@@ -1,11 +1,6 @@
-import pyautogui
 from sprites import Cactus, Rex
 import numpy as np
-import pyautogui
-import imutils
 import os
-import sys
-from timeit import default_timer as timer
 import cv2
 
 

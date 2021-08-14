@@ -1,8 +1,7 @@
 """
-Jumpy v2 is a first approximation for estimating speed by looking at delta movements of the closest cacti. It creates some issues when cacti come in quick succession where rex doesn't jump. Also it's not super precise.
+Jumpy v2 is a first approximation for estimating speed by looking at delta movements of the closest cactus. It creates some issues when cacti come in quick succession where rex doesn't jump. Also speed estimation isn't super precise.
 """
 
-import pyautogui
 import numpy as np
 import pyautogui
 import sys
