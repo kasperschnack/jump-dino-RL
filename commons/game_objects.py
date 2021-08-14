@@ -1,7 +1,8 @@
-from sprites import Cactus, Rex
-import numpy as np
 import os
+
 import cv2
+import numpy as np
+from sprites import Cactus, Rex
 
 
 def get_game_screen():

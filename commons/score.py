@@ -1,8 +1,9 @@
 import os
-import cv2
-import numpy as np
 from os import listdir
 from os.path import isfile, join
+
+import cv2
+import numpy as np
 
 DIGIT_X_COORS = [1078, 1100, 1122, 1144, 1166]
 y = 18

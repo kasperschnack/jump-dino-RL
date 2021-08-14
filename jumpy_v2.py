@@ -2,11 +2,12 @@
 Jumpy v2 is a first approximation for estimating speed by looking at delta movements of the closest cactus. It creates some issues when cacti come in quick succession where rex doesn't jump. Also speed estimation isn't super precise.
 """
 
+import sys
+from timeit import default_timer as timer
+
+import cv2
 import numpy as np
 import pyautogui
-import sys
-import cv2
-from timeit import default_timer as timer
 from commons.game_objects import get_game_objects, get_game_screen
 
 start = timer()

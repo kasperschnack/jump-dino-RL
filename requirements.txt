@@ -1,2 +1,2 @@
-pyautogui
 opencv-python
+pyautogui

@@ -2,9 +2,11 @@
 # !pip install opencv-python
 # !pip install pyscreenshot
 
-import numpy as np
 from time import time
 
+import cv2
+import numpy as np
+import pyscreenshot as ImageGrab
 
 resolutions = [
     (0, 0, 100, 100),
@@ -14,11 +16,6 @@ resolutions = [
     (0, 0, 400, 400),
     (0, 0, 800, 400),
 ]
-
-
-import numpy as np
-import pyscreenshot as ImageGrab
-import cv2
 
 
 def show(nparray):
