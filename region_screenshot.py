@@ -1,4 +1,3 @@
-import pyautogui
+import os
 
-im = pyautogui.screenshot(region=(190*2,410*2, 210*2,420*2)) 
-im.save('test.png')
+os.system("screencapture -x -R199,417,50,50 filename.png")
