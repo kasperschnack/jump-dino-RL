@@ -2,7 +2,13 @@ import os
 
 import cv2
 import numpy as np
-from sprites import Cactus, Rex
+from commons.sprites import Cactus, Rex
+
+rex_x_coord = 62
+rex_width = 80
+rex_collision_x_coord = rex_x_coord + rex_width
+cv2.namedWindow("bounding_box")
+cv2.moveWindow("bounding_box", 720, 0)
 
 
 def get_game_screen():
@@ -43,13 +49,6 @@ def group_close_cacti(cacti: list) -> list:
         prev = cactus
     if group:
         yield group
-
-
-rex_x_coord = 62
-rex_width = 80
-rex_collision_x_coord = rex_x_coord + rex_width
-cv2.namedWindow("bounding_box")
-cv2.moveWindow("bounding_box", 720, 0)
 
 
 def get_game_objects(img: np.ndarray) -> tuple:
