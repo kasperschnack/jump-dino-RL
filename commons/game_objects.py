@@ -1,4 +1,5 @@
 import os
+from typing import Generator
 
 import cv2
 import numpy as np
@@ -36,7 +37,7 @@ def merge_cacti(a: Cactus, b: Cactus) -> Cactus:
     return Cactus(x, y, w, h)
 
 
-def group_close_cacti(cacti: list) -> list:
+def group_close_cacti(cacti: list) -> Generator:
     cacti.sort(key=lambda x: x.horizontal_center)
     prev = None
     group = []

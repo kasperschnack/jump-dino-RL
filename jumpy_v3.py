@@ -9,7 +9,7 @@ import traceback
 import cv2
 import pyautogui
 from commons.game_objects import get_game_objects, get_game_screen
-from commons.score import get_score
+from commons.game_state import get_score
 
 starting_jump_distance = 345
 score = 0
