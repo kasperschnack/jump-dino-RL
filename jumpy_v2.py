@@ -8,7 +8,7 @@ import pyautogui
 import sys
 import cv2
 from timeit import default_timer as timer
-from game_objects import get_game_objects, get_game_screen
+from commons.game_objects import get_game_objects, get_game_screen
 
 start = timer()
 old_shortest_distance = 0
