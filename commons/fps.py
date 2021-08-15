@@ -5,10 +5,9 @@ def get_start_time() -> float:
     return timer()
 
 
-def print_fps(start_time: float, counter: int, freq: int = 1) -> int:
-    counter += 1
+def print_fps(start_time: float, counter: int, freq: int = 1) -> float:
     if (timer() - start_time) > freq:
         print("FPS: ", counter / (timer() - start_time))
         counter = 0
-        start_time = timer()
-    return counter
+        return timer()
+    return start_time

@@ -5,26 +5,24 @@ import cv2
 import numpy as np
 from commons.sprites import Cactus
 
-REX_X_COORD = 62
+REX_X_COORD = 60
 REX_WIDTH = 80
 REX_COLLISION_X_COORD = REX_X_COORD + REX_WIDTH
 
 
 def get_game_screen():
     os.system("screencapture -x -R55,305,610,160 screendump.png")
-    return cv2.imread("screendump.png")
+    return cv2.imread("screendump.png", 0)
     # return cv2.imread("test.png")
 
 
-def recursive_union_cacti(cacti: list) -> list:
+def recursive_union_cacti(cacti: list) -> Cactus:
     if len(cacti) > 2:
         return merge_cacti(cacti[0], recursive_union_cacti(cacti[1:]))
     elif len(cacti) == 2:
         return merge_cacti(cacti[0], cacti[1])
-    elif len(cacti) == 1:
-        return cacti[0]
     else:
-        return []
+        return cacti[0]
 
 
 def merge_cacti(a: Cactus, b: Cactus) -> Cactus:
@@ -52,14 +50,11 @@ def group_close_cacti(cacti: list) -> Generator:
 
 
 def get_cacti_positions(img: np.ndarray) -> list:
-    # convert to grayscale
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
     # invert image
-    gray = 255 - gray
+    img = 255 - img
 
     # threshold
-    thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY)[1]
 
     # get contours
     contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -82,3 +77,7 @@ def get_cacti_positions(img: np.ndarray) -> list:
         super_cacti.append(super_cactus)
 
     return super_cacti
+
+
+if __name__ == "__main__":
+    get_game_screen()
