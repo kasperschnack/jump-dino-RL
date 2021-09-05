@@ -15,14 +15,14 @@ GAME_OVER_X = 420
 GAME_OVER_HEIGHT = 21
 GAME_OVER_WIDTH = 381
 
-REX_X = 60
+REX_X = 61
 REX_Y = 188
 REX_WIDTH = 80
 REX_HEIGHT = 70
 
-TEMPLATE_THRESHOLD = 0.99
+TEMPLATE_THRESHOLD = 0.92
 
-TEMPLATE_FOLDER_PATH = "./digit_templates/"
+TEMPLATE_FOLDER_PATH = "./sprites/digit_templates/"
 DIGIT_TEMPLATES = [
     f for f in listdir(TEMPLATE_FOLDER_PATH) if isfile(join(TEMPLATE_FOLDER_PATH, f))
 ]
@@ -48,7 +48,7 @@ def check_if_game_over(img: np.ndarray) -> bool:
         GAME_OVER_Y : GAME_OVER_Y + GAME_OVER_HEIGHT,
         GAME_OVER_X : GAME_OVER_X + GAME_OVER_WIDTH,
     ]
-    template = cv2.imread("game_over.png", 0)
+    template = cv2.imread("./sprites/game_over.png", 0)
     res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
     if np.amax(res) > TEMPLATE_THRESHOLD:
         return True
@@ -61,8 +61,11 @@ def check_if_rex_in_the_air(img: np.ndarray) -> bool:
         REX_Y : REX_Y + REX_HEIGHT,
         REX_X : REX_X + REX_WIDTH,
     ]
-    template = cv2.imread("rex.png", 0)
+    # cv2.imshow("hejdu", crop_img)
+    # cv2.waitKey(0)
+    template = cv2.imread("./sprites/rex.png", 0)
     res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
+    # print(np.amax(res))
     if np.amax(res) > TEMPLATE_THRESHOLD:
         return False
     return True

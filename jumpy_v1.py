@@ -15,7 +15,7 @@ from commons.fps import get_start_time, print_fps
 # "white" pixels: RGB: (247, 247, 247)
 # "black" pixels: RGB: (83, 83, 83)
 def get_game_screen():
-    os.system("screencapture -x -R55,305,130,610 filename.png")
+    os.system("screencapture -x -R133,402,265,35 filename.png")
     im = cv2.imread("filename.png", cv2.IMREAD_GRAYSCALE)
     return im
 
