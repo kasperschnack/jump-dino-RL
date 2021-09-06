@@ -5,19 +5,18 @@ import cv2
 import numpy as np
 from commons.sprites import Cactus
 
-REX_X_COORD = 60
+REX_X_COORD = 52
 REX_WIDTH = 80
 REX_COLLISION_X_COORD = REX_X_COORD + REX_WIDTH
 
-
-GAME_CORNER_DIST_FROM_TEMPLATE = 435
-GAME_WIDTH = 600
-GAME_HEIGHT = 130
+GAME_CORNER_DIST_FROM_TEMPLATE = 868
+GAME_WIDTH = 1200
+GAME_HEIGHT = 260
 TEMPLATE_THRESHOLD = 0.92
 
 # This function uses "HI" as an anchor point for getting the game screen.
 # NOTE: "HI" only appears after playing at least one game.
-def get_game_coords():
+def get_game_coords() -> tuple:
     os.system("screencapture -x screendump.png")
     screen = cv2.imread("screendump.png", 0)
     template = cv2.imread("./sprites/hi.png", 0)
@@ -31,8 +30,10 @@ def get_game_coords():
     return x, y
 
 
-def get_game_screen(x, y):
-    os.system(f"screencapture -x -R{x},{y},{GAME_WIDTH},{GAME_HEIGHT} screendump.png")
+def get_game_frame(x: int, y: int) -> np.ndarray:
+    os.system(
+        f"screencapture -x -R{x/2},{y/2},{GAME_WIDTH/2},{GAME_HEIGHT/2} screendump.png"
+    )
     return cv2.imread("screendump.png", 0)
     # return cv2.imread("test.png")
 
@@ -102,4 +103,4 @@ def get_cacti_positions(img: np.ndarray) -> list:
 
 if __name__ == "__main__":
     x, y = get_game_coords()
-    get_game_screen(x, y)
+    get_game_frame(x, y)

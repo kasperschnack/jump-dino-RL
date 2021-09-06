@@ -8,14 +8,15 @@ from timeit import default_timer as timer
 import cv2
 import numpy as np
 import pyautogui
-from commons.game_objects import get_cacti_positions, get_game_screen
+from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
 
 start = timer()
 old_shortest_distance = 0
 speeds = []
+x, y = get_game_coords()
 while 1:
     # read image
-    img = get_game_screen()
+    img = get_game_frame(x, y)
 
     rex, super_cacti = get_cacti_positions(img)
 

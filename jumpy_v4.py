@@ -7,7 +7,7 @@ import time
 
 import pyautogui
 from commons.fps import get_start_time, print_fps
-from commons.game_objects import get_cacti_positions, get_game_coords, get_game_screen
+from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
 from commons.game_state import check_if_game_over, check_if_rex_in_the_air, get_score
 
 starting_jump_distance = 335
@@ -21,7 +21,7 @@ x, y = get_game_coords()
 
 while True:
     # read image
-    img = get_game_screen(x, y)
+    img = get_game_frame(x, y)
 
     # find object locations
     super_cacti = get_cacti_positions(img)
