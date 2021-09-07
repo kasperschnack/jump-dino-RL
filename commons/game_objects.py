@@ -86,10 +86,13 @@ def get_cacti_positions(img: np.ndarray) -> list:
         area = cv2.contourArea(cnt)
         if area > 500:  # filtering contours
             x, y, w, h = cv2.boundingRect(cnt)
-            if w / h < 4:  # filtering even more
-                distance_to_rex = x + w - REX_COLLISION_X_COORD
-                if distance_to_rex > w:
-                    cacti.append(Cactus(x, y, w, h, distance_to_rex))
+            if (
+                y > 112
+            ):  # the highest flying pterodactyls can't be jumped over so we just want to ignore those
+                if w / h < 4:  # filtering even more
+                    distance_to_rex = x + w - REX_COLLISION_X_COORD
+                    if distance_to_rex > w:
+                        cacti.append(Cactus(x, y, w, h, distance_to_rex))
 
     cacti_clusters = list(group_close_cacti(cacti))
     super_cacti = []
