@@ -17,16 +17,9 @@ x, y = get_game_coords()
 while 1:
     # read image
     img = get_game_frame(x, y)
+    super_cacti = get_cacti_positions(img)
 
-    rex, super_cacti = get_cacti_positions(img)
-
-    # # show thresh and result
-    distances = []
-    for super_cactus in super_cacti:
-        # x, y, w, h = super_cactus.x, super_cactus.y, super_cactus.w, super_cactus.h
-        # cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        distance_from_rex = (super_cactus.x + super_cactus.w) - (rex.x + rex.w)
-        distances.append(distance_from_rex)
+    distances = [cactus.distance_to_rex for cactus in super_cacti]
     if distances:
         shortest_distance = min(distances)
     if shortest_distance != 0 and shortest_distance < old_shortest_distance:
