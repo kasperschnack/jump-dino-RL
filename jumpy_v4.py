@@ -5,13 +5,17 @@ Jumpy v4 improves on v3 by sampling starting_jump_distance and the score_to_spee
 import sys
 import time
 
+import numpy as np
 import pyautogui
 from commons.fps import get_start_time, print_fps
 from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
 from commons.game_state import check_if_game_over, check_if_rex_in_the_air, get_score
+from commons.io_utils import store_data
 
-starting_jump_distance = 335
-score_to_speed_ratio = 1 / 3
+starting_jump_distance = int(np.random.normal(300, 30))
+score_to_speed_ratio = np.random.normal(1 / 3, 1 / 3)
+print(f"starting_jump_distance: {starting_jump_distance}")
+print(f"score_to_speed_ratio: {score_to_speed_ratio}")
 score = 0
 start_time = time.time()
 freq = 1
@@ -35,7 +39,9 @@ while True:
 
     if check_if_game_over(img) == True:
         print("game over :/")
-        print("final score: ", score)
+        print(f"final score: {score}")
+        data = [score, starting_jump_distance, score_to_speed_ratio]
+        store_data(data, "jumpy_v4")
         sys.exit(0)
 
     jump_distance = starting_jump_distance + int(score_to_speed_ratio * score)
