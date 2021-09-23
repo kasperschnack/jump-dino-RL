@@ -6,7 +6,6 @@ from time import time
 
 import cv2
 import numpy as np
-import pyscreenshot as ImageGrab
 
 resolutions = [
     (0, 0, 100, 100),
@@ -64,14 +63,15 @@ def pyscreenshot_test(shape):
     return average_ms, printscreen.shape
 
 
-named_function_pair = zip(
-    "mss_test,pil_test,pyscreenshot_test".split(","),
-    [mss_test, pil_test, pyscreenshot_test],
-)
+if __name__ == "__main__":
+    named_function_pair = zip(
+        "mss_test,pil_test,pyscreenshot_test".split(","),
+        [mss_test, pil_test, pyscreenshot_test],
+    )
 
-for name, function in named_function_pair:
-    results = [function(res) for res in resolutions]
-    print("Speed results for using", name)
-    for res, result in zip(resolutions, results):
-        speed, shape = result
-        print(res, "took", speed, "ms, produced shaped", shape)
+    for name, function in named_function_pair:
+        results = [function(res) for res in resolutions]
+        print("Speed results for using", name)
+        for res, result in zip(resolutions, results):
+            speed, shape = result
+            print(res, "took", speed, "ms, produced shaped", shape)

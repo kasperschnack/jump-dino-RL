@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn.utils import shuffle
 
 
 def calc_selection_probabilities(df: pd.DataFrame) -> pd.DataFrame:
@@ -11,6 +12,8 @@ def calc_selection_probabilities(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def select_from_previous_population(df: pd.DataFrame) -> pd.DataFrame:
+    # to counter potential biases when doing other operations we shuffle around the indeces
+    df = shuffle(df).reset_index(drop=True)
     # sample new population
     new_population = df.iloc[np.random.choice(df.index, 6, p=df["selection_proba"])]
     # include the best performer from previous population
@@ -31,5 +34,11 @@ def crossover(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def mutation():
-    pass
+def mutation(val: float, param_type) -> float:
+    # decide whether to mutate or not
+    if np.random.choice([0, 1], 1, p=[0.6, 0.4])[0]:
+        if param_type == "initial_jump_distance":
+            val = np.random.normal(val, val ** 0.5, 1)[0]
+        elif param_type == "score_to_speed_ratio":
+            val = np.random.gamma(val + 1, val, 1)[0]
+    return val
