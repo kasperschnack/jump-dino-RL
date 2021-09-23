@@ -18,6 +18,8 @@ def select_from_previous_population(df: pd.DataFrame) -> pd.DataFrame:
     new_population = df.iloc[np.random.choice(df.index, 6, p=df["selection_proba"])]
     # include the best performer from previous population
     new_population.append(df.iloc[df["fitness"].argmax()])
+    # reset fitness
+    df["fitness"] = 0
     return new_population
 
 
