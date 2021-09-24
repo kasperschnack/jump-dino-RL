@@ -43,7 +43,7 @@ def mutate(val: float, param_type) -> float:
         if param_type == "initial_jump_distance":
             val = np.random.normal(val, val ** 0.5, 1)[0]
         elif param_type == "score_to_speed_ratio":
-            val = np.random.gamma(val + 1, val, 1)[0]
+            val = np.random.gamma(val, val, 1)[0]
     return val
 
 
