@@ -9,17 +9,18 @@ def calc_selection_probabilities(df: pd.DataFrame) -> pd.DataFrame:
     df["selection_proba"] = df["fitness_discounted"].apply(
         lambda x: x / df["fitness_discounted"].sum()
     )
+    return df
 
 
 def select_from_previous_population(df: pd.DataFrame) -> pd.DataFrame:
-    # to counter potential biases when doing other operations we shuffle around the indeces
-    df = shuffle(df).reset_index(drop=True)
     # sample new population
     new_population = df.iloc[np.random.choice(df.index, 6, p=df["selection_proba"])]
     # include the best performer from previous population
     new_population.append(df.iloc[df["fitness"].argmax()])
     # reset fitness
     df["fitness"] = 0
+    # to counter potential biases when doing other operations we shuffle around the indeces
+    df = shuffle(df).reset_index(drop=True)
     return new_population
 
 
@@ -36,7 +37,7 @@ def crossover(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def mutation(val: float, param_type) -> float:
+def mutate(val: float, param_type) -> float:
     # decide whether to mutate or not
     if np.random.choice([0, 1], 1, p=[0.6, 0.4])[0]:
         if param_type == "initial_jump_distance":
@@ -44,3 +45,16 @@ def mutation(val: float, param_type) -> float:
         elif param_type == "score_to_speed_ratio":
             val = np.random.gamma(val + 1, val, 1)[0]
     return val
+
+
+def evolve_new_generation(prev_pop: pd.DataFrame) -> pd.DataFrame:
+    prev_pop = calc_selection_probabilities(prev_pop)
+    new_pop = select_from_previous_population(prev_pop)
+    new_pop = crossover(new_pop)
+    new_pop["initial_jump_distance"] = new_pop["initial_jump_distance"].apply(
+        mutate, param_type="initial_jump_distance"
+    )
+    new_pop["score_to_speed_ratio"] = new_pop["score_to_speed_ratio"].apply(
+        mutate, param_type="score_to_speed_ratio"
+    )
+    return new_pop
