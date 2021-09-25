@@ -8,6 +8,7 @@ from timeit import default_timer as timer
 import cv2
 import numpy as np
 import pyautogui
+
 from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
 
 start = timer()
@@ -30,10 +31,6 @@ while 1:
     print(jump_distance)
     if shortest_distance < jump_distance:
         pyautogui.press("space")
-    # x, y, w, h = rex.x, rex.y, rex.w, rex.h
-    # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
-    # img = imutils.resize(img, height=200)
-    # cv2.imshow("bounding_box", img)
     key = cv2.waitKey(1) & 0xFF
     if key == ord("q"):
         sys.exit(0)

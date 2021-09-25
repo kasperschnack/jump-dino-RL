@@ -3,10 +3,14 @@ from typing import Generator
 
 import cv2
 import numpy as np
+
 from commons.sprites import Cactus
 
 REX_X_COORD = 52
+REX_Y_COORD = 169
 REX_WIDTH = 80
+REX_HEIGHT = 70
+
 REX_COLLISION_X_COORD = REX_X_COORD + REX_WIDTH
 
 GAME_CORNER_DIST_FROM_TEMPLATE = 868
