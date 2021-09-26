@@ -4,10 +4,10 @@ from typing import Generator
 import cv2
 import numpy as np
 
-from commons.sprites import Obstacle
+from commons.sprites import Obstacle, Rex
 
 REX_X_COORD = 52
-REX_Y_COORD = 169
+REX_Y_COORD = 170
 REX_WIDTH = 80
 REX_HEIGHT = 70
 
@@ -64,15 +64,39 @@ def group_close_obstacles(obstacles: list) -> Generator:
     obstacles.sort(key=lambda x: x.horizontal_center)
     prev = None
     group = []
-    for cactus in obstacles:
-        if not prev or cactus.horizontal_center - prev.horizontal_center <= 60:
-            group.append(cactus)
+    for obstacle in obstacles:
+        if not prev or obstacle.horizontal_center - prev.horizontal_center <= 60:
+            group.append(obstacle)
         else:
             yield group
-            group = [cactus]
-        prev = cactus
+            group = [obstacle]
+        prev = obstacle
     if group:
         yield group
+
+
+def get_rex_position(img: np.ndarray) -> Rex:
+    assert (
+        len(img.shape) == 2
+    )  # image has to be grayscale for template matching to work
+    crop_img = img[
+        0:GAME_HEIGHT,
+        REX_X_COORD : REX_X_COORD + REX_WIDTH,
+    ]
+    template = cv2.imread("./sprites/rex.png", 0)
+    res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
+    _, max_val, _, max_loc = cv2.minMaxLoc(res)
+
+    assert max_val > TEMPLATE_THRESHOLD
+    y = max_loc[1]
+    return Rex(REX_X_COORD, y, REX_WIDTH, REX_HEIGHT)
+
+
+def check_if_rex_in_the_air(img: np.ndarray) -> bool:
+    rex = get_rex_position(img)
+    if rex.y < REX_Y_COORD:
+        return True
+    return False
 
 
 def get_obstacle_positions(img: np.ndarray) -> list:
@@ -102,8 +126,8 @@ def get_obstacle_positions(img: np.ndarray) -> list:
     super_obstacles = []
 
     for obstacles_cluster in obstacles_clusters:
-        super_cactus = recursive_union_obstacles(obstacles_cluster)
-        super_obstacles.append(super_cactus)
+        super_obstacle = recursive_union_obstacles(obstacles_cluster)
+        super_obstacles.append(super_obstacle)
 
     return super_obstacles
 

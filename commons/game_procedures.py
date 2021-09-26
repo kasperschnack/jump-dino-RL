@@ -7,16 +7,13 @@ import pandas as pd
 import pyautogui
 
 from commons.game_objects import (
-    REX_HEIGHT,
-    REX_WIDTH,
-    REX_X_COORD,
-    REX_Y_COORD,
+    check_if_rex_in_the_air,
     get_game_coords,
     get_game_frame,
     get_obstacle_positions,
+    get_rex_position,
 )
-from commons.game_state import check_if_game_over, check_if_rex_in_the_air, get_score
-from commons.io_utils import store_data
+from commons.game_state import check_if_game_over, get_score
 
 
 def play_out_population(df: pd.DataFrame, population_name: str) -> pd.DataFrame:
@@ -53,7 +50,7 @@ def play_single_game(
 
         # find object locations
         super_obstacles = get_obstacle_positions(img)
-        distances = [cactus.distance_to_rex for cactus in super_obstacles]
+        distances = [obstacle.distance_to_rex for obstacle in super_obstacles]
 
         # When reaching checkpoints the score blinks which may result get_score returning 0. To counter wrong behavior use the last known score instead.
         previous_score = score
@@ -82,10 +79,10 @@ def play_single_game(
 
 
 def display_game(img, obstacles, distances):
-    x, y, w, h = REX_X_COORD, REX_Y_COORD, REX_WIDTH, REX_HEIGHT
-    cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
-    for cactus in obstacles:
-        x, y, w, h = cactus.x, cactus.y, cactus.w, cactus.h
+    rex = get_rex_position(img)
+    cv2.rectangle(img, (rex.x, rex.y), (rex.x + rex.w, rex.y + rex.h), (0, 255, 0), 1)
+    for obstacle in obstacles:
+        x, y, w, h = obstacle.x, obstacle.y, obstacle.w, obstacle.h
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
     img = imutils.resize(img, width=720)
     if distances:

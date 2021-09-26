@@ -1,4 +1,4 @@
-# Rexy cactus jumper
+# Rexy obstacle jumper
 Making this bot project to learn about genetic algorithms and reinforcement learning.
 
 Only works on a mac with retina display (retina does wierd things which i have to account for).

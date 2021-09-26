@@ -15,11 +15,6 @@ GAME_OVER_X = 410
 GAME_OVER_HEIGHT = 21
 GAME_OVER_WIDTH = 381
 
-REX_X = 52
-REX_Y = 170
-REX_WIDTH = 80
-REX_HEIGHT = 70
-
 TEMPLATE_THRESHOLD = 0.92
 
 TEMPLATE_FOLDER_PATH = "./sprites/digit_templates/"
@@ -53,24 +48,3 @@ def check_if_game_over(img: np.ndarray) -> bool:
     if np.amax(res) > TEMPLATE_THRESHOLD:
         return True
     return False
-
-
-def check_if_rex_in_the_air(img: np.ndarray) -> bool:
-    assert len(img.shape) == 2  # image has to
-    crop_img = img[
-        REX_Y : REX_Y + REX_HEIGHT,
-        REX_X : REX_X + REX_WIDTH,
-    ]
-    # cv2.imshow("hejdu", crop_img)
-    # cv2.waitKey(0)
-    template = cv2.imread("./sprites/rex.png", 0)
-    res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
-    # print(np.amax(res))
-    if np.amax(res) > TEMPLATE_THRESHOLD:
-        return False
-    return True
-
-
-if __name__ == "__main__":
-    image = cv2.imread("test3.png", 0)
-    print(check_if_rex_in_the_air(image))
