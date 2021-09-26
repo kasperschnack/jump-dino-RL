@@ -7,8 +7,9 @@ import time
 
 import numpy as np
 import pyautogui
+
 from commons.fps import get_start_time, print_fps
-from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
+from commons.game_objects import get_game_coords, get_game_frame, get_obstacle_positions
 from commons.game_state import check_if_game_over, check_if_rex_in_the_air, get_score
 from commons.io_utils import store_data
 
@@ -28,8 +29,8 @@ while True:
     img = get_game_frame(x, y)
 
     # find object locations
-    super_cacti = get_cacti_positions(img)
-    distances = [cactus.distance_to_rex for cactus in super_cacti]
+    super_obstacles = get_obstacle_positions(img)
+    distances = [cactus.distance_to_rex for cactus in super_obstacles]
 
     # When reaching checkpoints the score blinks which may result get_score returning 0. To counter wrong behavior use the last known score instead.
     previous_score = score

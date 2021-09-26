@@ -4,7 +4,7 @@ from typing import Generator
 import cv2
 import numpy as np
 
-from commons.sprites import Cactus
+from commons.sprites import Obstacle
 
 REX_X_COORD = 52
 REX_Y_COORD = 169
@@ -42,29 +42,29 @@ def get_game_frame(x: int, y: int) -> np.ndarray:
     # return cv2.imread("test.png")
 
 
-def recursive_union_cacti(cacti: list) -> Cactus:
-    if len(cacti) > 2:
-        return merge_cacti(cacti[0], recursive_union_cacti(cacti[1:]))
-    elif len(cacti) == 2:
-        return merge_cacti(cacti[0], cacti[1])
+def recursive_union_obstacles(obstacles: list) -> Obstacle:
+    if len(obstacles) > 2:
+        return merge_obstacles(obstacles[0], recursive_union_obstacles(obstacles[1:]))
+    elif len(obstacles) == 2:
+        return merge_obstacles(obstacles[0], obstacles[1])
     else:
-        return cacti[0]
+        return obstacles[0]
 
 
-def merge_cacti(a: Cactus, b: Cactus) -> Cactus:
+def merge_obstacles(a: Obstacle, b: Obstacle) -> Obstacle:
     x = min(a.x, b.x)
     y = min(a.y, b.y)
     w = max(a.x + a.w, b.x + b.w) - x
     h = max(a.y + a.h, b.y + b.h) - y
     distance_to_rex = max(a.distance_to_rex, b.distance_to_rex)
-    return Cactus(x, y, w, h, distance_to_rex)
+    return Obstacle(x, y, w, h, distance_to_rex)
 
 
-def group_close_cacti(cacti: list) -> Generator:
-    cacti.sort(key=lambda x: x.horizontal_center)
+def group_close_obstacles(obstacles: list) -> Generator:
+    obstacles.sort(key=lambda x: x.horizontal_center)
     prev = None
     group = []
-    for cactus in cacti:
+    for cactus in obstacles:
         if not prev or cactus.horizontal_center - prev.horizontal_center <= 60:
             group.append(cactus)
         else:
@@ -75,7 +75,7 @@ def group_close_cacti(cacti: list) -> Generator:
         yield group
 
 
-def get_cacti_positions(img: np.ndarray) -> list:
+def get_obstacle_positions(img: np.ndarray) -> list:
     # invert image
     img = 255 - img
 
@@ -85,7 +85,7 @@ def get_cacti_positions(img: np.ndarray) -> list:
     # get contours
     contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = contours[0] if len(contours) == 2 else contours[1]
-    cacti = []
+    obstacles = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
         if area > 500:  # filtering contours
@@ -96,16 +96,16 @@ def get_cacti_positions(img: np.ndarray) -> list:
                 if w / h < 4:  # filtering even more
                     distance_to_rex = x + w - REX_COLLISION_X_COORD
                     if distance_to_rex > w:
-                        cacti.append(Cactus(x, y, w, h, distance_to_rex))
+                        obstacles.append(Obstacle(x, y, w, h, distance_to_rex))
 
-    cacti_clusters = list(group_close_cacti(cacti))
-    super_cacti = []
+    obstacles_clusters = list(group_close_obstacles(obstacles))
+    super_obstacles = []
 
-    for cacti_cluster in cacti_clusters:
-        super_cactus = recursive_union_cacti(cacti_cluster)
-        super_cacti.append(super_cactus)
+    for obstacles_cluster in obstacles_clusters:
+        super_cactus = recursive_union_obstacles(obstacles_cluster)
+        super_obstacles.append(super_cactus)
 
-    return super_cacti
+    return super_obstacles
 
 
 if __name__ == "__main__":

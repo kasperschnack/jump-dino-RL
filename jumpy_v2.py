@@ -1,5 +1,5 @@
 """
-Jumpy v2 is a first approximation for estimating speed by looking at delta movements of the closest cactus. It creates some issues when cacti come in quick succession where rex doesn't jump. Also speed estimation isn't super precise.
+Jumpy v2 is a first approximation for estimating speed by looking at delta movements of the closest cactus. It creates some issues when obstacles come in quick succession where rex doesn't jump. Also speed estimation isn't super precise.
 """
 
 import sys
@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 import pyautogui
 
-from commons.game_objects import get_cacti_positions, get_game_coords, get_game_frame
+from commons.game_objects import get_game_coords, get_game_frame, get_obstacle_positions
 
 start = timer()
 old_shortest_distance = 0
@@ -18,9 +18,9 @@ x, y = get_game_coords()
 while 1:
     # read image
     img = get_game_frame(x, y)
-    super_cacti = get_cacti_positions(img)
+    super_obstacles = get_obstacle_positions(img)
 
-    distances = [cactus.distance_to_rex for cactus in super_cacti]
+    distances = [cactus.distance_to_rex for cactus in super_obstacles]
     if distances:
         shortest_distance = min(distances)
     if shortest_distance != 0 and shortest_distance < old_shortest_distance:

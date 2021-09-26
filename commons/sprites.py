@@ -11,7 +11,7 @@ class Rex(Sprite):
     pass
 
 
-class Cactus(Sprite):
+class Obstacle(Sprite):
     def __init__(self, x: int, y: int, w: int, h: int, distance_to_rex: int):
         self.x = x
         self.y = y

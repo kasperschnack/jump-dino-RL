@@ -11,5 +11,4 @@ Got tired of turning off the internet access each time I needed to test the code
 - Get rex his own class
 - Use template matching instead of absolute coordinates when clicking to start new game
 - Test out the GA on a toy problem (solve a polynomial)
-- House keeping: the cacti aren't just cacti. They can also be pteradactyls - maybe I should give them a new name?
 - Give jumpy v5 a spin!

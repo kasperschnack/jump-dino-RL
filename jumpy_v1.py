@@ -1,8 +1,9 @@
 """
-Jumpy v1 is super simple. It looks at the path in front of rex. If there are any pixels that aren't white, rex jumps. Doesn't work so well after some time as the cacti are speeding up.
+Jumpy v1 is super simple. It looks at the path in front of rex. If there are any pixels that aren't white, rex jumps. Doesn't work so well after some time as the obstacles are speeding up.
 """
 import numpy as np
 import pyautogui
+
 from commons.fps import get_start_time, print_fps
 from commons.game_objects import get_game_coords, get_game_frame
 

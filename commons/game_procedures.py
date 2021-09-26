@@ -11,9 +11,9 @@ from commons.game_objects import (
     REX_WIDTH,
     REX_X_COORD,
     REX_Y_COORD,
-    get_cacti_positions,
     get_game_coords,
     get_game_frame,
+    get_obstacle_positions,
 )
 from commons.game_state import check_if_game_over, check_if_rex_in_the_air, get_score
 from commons.io_utils import store_data
@@ -52,8 +52,8 @@ def play_single_game(
         img = get_game_frame(x, y)
 
         # find object locations
-        super_cacti = get_cacti_positions(img)
-        distances = [cactus.distance_to_rex for cactus in super_cacti]
+        super_obstacles = get_obstacle_positions(img)
+        distances = [cactus.distance_to_rex for cactus in super_obstacles]
 
         # When reaching checkpoints the score blinks which may result get_score returning 0. To counter wrong behavior use the last known score instead.
         previous_score = score
@@ -77,14 +77,14 @@ def play_single_game(
             counter = 0
             start_time = time.time()
         if debug_mode:
-            display_game(img, super_cacti, distances)
+            display_game(img, super_obstacles, distances)
     return score
 
 
-def display_game(img, cacti, distances):
+def display_game(img, obstacles, distances):
     x, y, w, h = REX_X_COORD, REX_Y_COORD, REX_WIDTH, REX_HEIGHT
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
-    for cactus in cacti:
+    for cactus in obstacles:
         x, y, w, h = cactus.x, cactus.y, cactus.w, cactus.h
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
     img = imutils.resize(img, width=720)
