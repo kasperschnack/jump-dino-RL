@@ -64,8 +64,8 @@ def play_single_game(
             break
 
         jump_distance = initial_jump_distance + int(score_to_speed_ratio * score)
-        if check_if_rex_in_the_air(img) is False:
-            if distances and min(distances) < jump_distance:
+        if distances and min(distances) < jump_distance:
+            if not check_if_rex_in_the_air(img):
                 print("Jumping!")
                 pyautogui.press("space")
         counter += 1
@@ -103,4 +103,4 @@ def display_game(img, obstacles, distances):
 
 
 if __name__ == "__main__":
-    play_single_game(283, 0.175, True)
+    play_single_game(320, 0.175, True)

@@ -7,16 +7,19 @@ import numpy as np
 from commons.sprites import Obstacle, Rex
 
 REX_X_COORD = 52
-REX_Y_COORD = 170
+REX_Y_COORD = 190
 REX_WIDTH = 80
 REX_HEIGHT = 70
 
 REX_COLLISION_X_COORD = REX_X_COORD + REX_WIDTH
 
-GAME_CORNER_DIST_FROM_TEMPLATE = 868
+GAME_CORNER_DIST_FROM_TEMPLATE_X = 868
+GAME_CORNER_DIST_FROM_TEMPLATE_Y = 20
 GAME_WIDTH = 1200
-GAME_HEIGHT = 260
+GAME_HEIGHT = 276
 TEMPLATE_THRESHOLD = 0.92
+
+REX_TEMPLATE = cv2.imread("./sprites/rex.png", 0)
 
 # This function uses "HI" as an anchor point for getting the game screen.
 # NOTE: "HI" only appears after playing at least one game.
@@ -29,8 +32,8 @@ def get_game_coords() -> tuple:
     _, max_val, _, max_loc = cv2.minMaxLoc(res)
 
     assert max_val > TEMPLATE_THRESHOLD
-    x = max_loc[0] - GAME_CORNER_DIST_FROM_TEMPLATE
-    y = max_loc[1]
+    x = max_loc[0] - GAME_CORNER_DIST_FROM_TEMPLATE_X
+    y = max_loc[1] - GAME_CORNER_DIST_FROM_TEMPLATE_Y
     return x, y
 
 
@@ -83,8 +86,8 @@ def get_rex_position(img: np.ndarray) -> Rex:
         0:GAME_HEIGHT,
         REX_X_COORD : REX_X_COORD + REX_WIDTH,
     ]
-    template = cv2.imread("./sprites/rex.png", 0)
-    res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
+
+    res = cv2.matchTemplate(crop_img, REX_TEMPLATE, cv2.TM_CCOEFF_NORMED)
     _, max_val, _, max_loc = cv2.minMaxLoc(res)
 
     assert max_val > TEMPLATE_THRESHOLD
@@ -93,10 +96,16 @@ def get_rex_position(img: np.ndarray) -> Rex:
 
 
 def check_if_rex_in_the_air(img: np.ndarray) -> bool:
-    rex = get_rex_position(img)
-    if rex.y < REX_Y_COORD:
-        return True
-    return False
+    assert len(img.shape) == 2  # image has to
+    crop_img = img[
+        REX_Y_COORD : REX_Y_COORD + REX_HEIGHT,
+        REX_X_COORD : REX_X_COORD + REX_WIDTH,
+    ]
+    template = cv2.imread("./sprites/rex.png", 0)
+    res = cv2.matchTemplate(crop_img, template, cv2.TM_CCOEFF_NORMED)
+    if np.amax(res) > TEMPLATE_THRESHOLD:
+        return False
+    return True
 
 
 def get_obstacle_positions(img: np.ndarray) -> list:
@@ -115,7 +124,7 @@ def get_obstacle_positions(img: np.ndarray) -> list:
         if area > 500:  # filtering contours
             x, y, w, h = cv2.boundingRect(cnt)
             if (
-                y > 112
+                y > 118
             ):  # the highest flying pterodactyls can't be jumped over so we just want to ignore those
                 if w / h < 4:  # filtering even more
                     distance_to_rex = x + w - REX_COLLISION_X_COORD
