@@ -8,6 +8,5 @@ Got tired of turning off the internet access each time I needed to test the code
 ![one jumpy boi](assets/screenshot.gif)
 
 ## Todo
-- Use template matching instead of absolute coordinates when clicking to start new game
 - Test out the GA on a toy problem (solve a polynomial)
 - Give jumpy v5 a spin!

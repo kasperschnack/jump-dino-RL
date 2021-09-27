@@ -13,7 +13,13 @@ from commons.game_objects import (
     get_obstacle_positions,
     get_rex_position,
 )
-from commons.game_state import check_if_game_over, get_score
+from commons.game_state import (
+    GAME_OVER_WIDTH,
+    GAME_OVER_X,
+    GAME_OVER_Y,
+    check_if_game_over,
+    get_score,
+)
 
 
 def play_out_population(df: pd.DataFrame, population_name: str) -> pd.DataFrame:
@@ -40,7 +46,7 @@ def play_single_game(
     img = get_game_frame(x, y)
     if check_if_game_over(img):
         print("Resetting game!")
-        pyautogui.moveTo(360, 400)
+        pyautogui.moveTo(int(x + GAME_OVER_X) / 2, int(y + GAME_OVER_Y) / 2)
         pyautogui.click()
         pyautogui.click()
 
