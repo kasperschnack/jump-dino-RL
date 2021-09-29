@@ -38,24 +38,18 @@ def crossover(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def mutate(val: float, param_type) -> float:
+def mutate(val: float) -> float:
     # decide whether to mutate or not
     if np.random.choice([0, 1], 1, p=[0.6, 0.4])[0]:
-        if param_type == "initial_jump_distance":
-            val = np.random.normal(val, val ** 0.5, 1)[0]
-        elif param_type == "score_to_speed_ratio":
-            val = np.random.gamma(val, val, 1)[0]
-    return val
+        val = np.random.gamma(val ** 0.5, val ** 0.5, 1)[0]
+    return val or 1
 
 
 def evolve_new_generation(prev_pop: pd.DataFrame) -> pd.DataFrame:
     prev_pop = calc_selection_probabilities(prev_pop)
+    print(prev_pop)
     new_pop = select_from_previous_population(prev_pop)
     new_pop = crossover(new_pop)
-    new_pop["initial_jump_distance"] = new_pop["initial_jump_distance"].apply(
-        mutate, param_type="initial_jump_distance"
-    )
-    new_pop["score_to_speed_ratio"] = new_pop["score_to_speed_ratio"].apply(
-        mutate, param_type="score_to_speed_ratio"
-    )
+    new_pop["initial_jump_distance"] = new_pop["initial_jump_distance"].apply(mutate)
+    new_pop["score_to_speed_ratio"] = new_pop["score_to_speed_ratio"].apply(mutate)
     return new_pop
