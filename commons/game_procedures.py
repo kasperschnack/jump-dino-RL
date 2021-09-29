@@ -13,13 +13,7 @@ from commons.game_objects import (
     get_obstacle_positions,
     get_rex_position,
 )
-from commons.game_state import (
-    GAME_OVER_WIDTH,
-    GAME_OVER_X,
-    GAME_OVER_Y,
-    check_if_game_over,
-    get_score,
-)
+from commons.game_state import GAME_OVER_X, GAME_OVER_Y, check_if_game_over, get_score
 
 
 def play_out_population(df: pd.DataFrame, population_name: str) -> pd.DataFrame:
