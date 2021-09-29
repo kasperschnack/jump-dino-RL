@@ -41,7 +41,7 @@ def crossover(df: pd.DataFrame) -> pd.DataFrame:
 def mutate(val: float) -> float:
     # decide whether to mutate or not
     if np.random.choice([0, 1], 1, p=[0.6, 0.4])[0]:
-        val = np.random.gamma(val ** 0.5, val ** 0.5, 1)[0]
+        val = np.random.normal(val, 1, 1)[0]
     return val or 1
 
 
