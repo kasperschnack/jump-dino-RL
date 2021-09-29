@@ -18,9 +18,10 @@ def select_from_previous_population(df: pd.DataFrame) -> pd.DataFrame:
     # include the best performer from previous population
     new_population.append(df.iloc[df["fitness"].argmax()])
     # reset fitness
-    df["fitness"] = 0
+    new_population["fitness"] = 0
+    new_population["fitness_discounted"] = 0
     # to counter potential biases when doing other operations we shuffle around the indeces
-    df = shuffle(df).reset_index(drop=True)
+    new_population = shuffle(new_population).reset_index(drop=True)
     return new_population
 
 
