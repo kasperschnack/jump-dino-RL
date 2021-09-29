@@ -16,13 +16,13 @@ def generate_initial_population():
 
 def second_order_polynomial_fitness(a: float, b: float):
     return (
-        -((a - 40) ** 2) - (b - 40) ** 2
+        -((a - 80) ** 2) - (b - 80) ** 2
     )  # taking the sqroot of a negative number complicates things a bit so imma assume we're not gonna choose numbers higher than a=400, b=400 and just let the rest be positive
 
 
 if __name__ == "__main__":
     prev_pop = pd.read_csv("experiments/sop_initial_population.csv")
-    for i in range(10):
+    for i in range(300):
         print("GENERATION", i)
         new_pop = evolve_new_generation(prev_pop)
         new_pop["fitness"] = new_pop.apply(

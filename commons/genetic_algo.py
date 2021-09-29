@@ -4,11 +4,10 @@ from sklearn.utils import shuffle
 
 
 def calc_selection_probabilities(df: pd.DataFrame) -> pd.DataFrame:
-    # fitness needs to be discounted such that a high fitness score doesn't hoard the probability of being selected
-    df["fitness_discounted"] = df["fitness"] ** 0.5
-    df["selection_proba"] = df["fitness_discounted"].apply(
-        lambda x: x / df["fitness_discounted"].sum()
-    )
+    df = df.sort_values("fitness", ascending=False, ignore_index=True)
+    df["rank"] = df.index + 1
+    df["scaled_fitness"] = 1 / df["rank"] ** 0.5 / len(df)
+    df["selection_proba"] = df["scaled_fitness"] / df["scaled_fitness"].sum()
     return df
 
 
@@ -18,8 +17,9 @@ def select_from_previous_population(df: pd.DataFrame) -> pd.DataFrame:
     # include the best performer from previous population
     new_population.append(df.iloc[df["fitness"].argmax()])
     # reset fitness
-    new_population["fitness"] = 0
-    new_population["fitness_discounted"] = 0
+    new_population = new_population.drop(
+        columns=["fitness", "rank", "scaled_fitness", "selection_proba"]
+    )
     # to counter potential biases when doing other operations we shuffle around the indeces
     new_population = shuffle(new_population).reset_index(drop=True)
     return new_population
